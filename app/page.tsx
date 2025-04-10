@@ -1,7 +1,11 @@
-"use client"
+import { createSupabaseServer } from "@/lib/supabase/server"
+import { redirect } from "next/navigation"
 
-import { LoginForm } from "./_components/login-form"
+export default async function HomePage() {
+  const supabase = await createSupabaseServer()
+  const { data } = await supabase.auth.getUser()
 
-export default function LoginPage() {
-  return <LoginForm />
+  if (!data.user) redirect("/login")
+
+  redirect("/dashboard")
 }
