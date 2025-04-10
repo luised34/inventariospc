@@ -1,8 +1,15 @@
+import { createSupabaseServer } from "@/lib/supabase/server"
 import { AppSidebar } from "../../components/app-sidebar"
 import { SiteHeader } from "../../components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { redirect } from "next/navigation"
 
-export default function Page() {
+export default async function Page() {
+  const supabase = await createSupabaseServer()
+  const { data } = await supabase.auth.getUser()
+
+  if (!data.user) redirect("/login")
+
   return (
     <div className="[--header-height:calc(theme(spacing.14))]">
       <SidebarProvider className="flex flex-col">
